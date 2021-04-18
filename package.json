@@ -1,0 +1,23 @@
+{
+  "name": "The-Oracle",
+  "version": "1.0.0",
+  "description": "Discord bot developed for Jak Month",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "lint": "eslint ."
+  },
+  "author": "Quartz563",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.2.0",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.6.2",
+    "sqlite3": "^5.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0"
+  }
+}
