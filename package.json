@@ -1,6 +1,7 @@
 {
   "name": "The-Oracle",
   "version": "1.0.0",
+  "private": "true",
   "description": "Discord bot developed for Jak Month",
   "main": "index.js",
   "scripts": {
@@ -11,6 +12,7 @@
   "author": "Quartz563",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^4.1.1",
     "discord.js": "^11.5.1",
     "dotenv": "^8.2.0",
     "mysql2": "^2.2.5",

@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     role_type: {
       type: DataTypes.STRING,
-      defaultValue: 'Member',
+      defaultValue: 'member',
       allowNull: false,
     },
   }, {

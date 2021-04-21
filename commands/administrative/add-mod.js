@@ -1,13 +1,13 @@
 const mentionHandler = requires('./index.js')
 module.export = {
-  name: 'organiser',
-  description: 'promotes a user to the position of Organiser',
+  name: 'mod',
+  description: 'Gives a specified user access to moderation commands',
   args: true,
   usage: '<user - given in form of @user>',
-  aliases: ['make-organiser'],
+  aliases: ['make-mod', 'moderator'],
   guildOnly: true,
   roleLocked: true,
-  role: ['moderator', 'administrator'],
+  role: ['administrator'],
   execute(client, message, args){
     //note: update database alongside the roles
   },
