@@ -11,7 +11,7 @@ const Users = require('./models/users')(sequelize, Sequelize.DataTypes);
 const Content = require('./models/content')(sequelize, Sequelize.DataTypes);
 const VideoCollection = require('./models/content')(sequelize, Sequelize.DataTypes);
 
-VideoCollection.belongsTo(Content, {foreignKey: 'video_id', as: "link"});
-VideoCollection.belongsTo(Users, {foreignKey: 'user_id', as: 'id'})
+VideoCollection.belongsTo(Content, {foreignKey: 'video_label', as: 'video_id'});
+VideoCollection.belongsTo(Users, {foreignKey: 'id', as: 'user_id'})
 
 module.exports = { Users, Content, VideoCollection };

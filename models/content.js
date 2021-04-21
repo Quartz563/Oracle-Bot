@@ -1,10 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   return sequelize.define('content', {
-    name: {
+    video_label: {
       type: DataTypes.STRING,
       unique: true,
     },
-    link: {
+    video_link: {
       type: DataTypes.STRING,
       allowNull: false,
     },

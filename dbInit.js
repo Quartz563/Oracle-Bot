@@ -15,7 +15,7 @@ const force = process.argv.includes('--force') || process.argv.includes('-f');
 
 sequelize.sync({force}).then(async () =>{
   const videos = [
-    videoCollection.upsert({name:'test', link: 'https://www.youtube.com/watch?v=miJSWExpRCA', particpiant: "Powercell_Zeke"}) //creatre a test video
+    videoCollection.upsert({name:'test', video_link: 'https://www.youtube.com/watch?v=miJSWExpRCA', particpiant: "Powercell_Zeke"}) //creatre a test video
   ];
   await Promise.all(videos);
 	//create and populate the beginnings of the formal database

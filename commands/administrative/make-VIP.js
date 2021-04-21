@@ -1,4 +1,4 @@
-const mentionHandler = requires('./index.js')
+const mentionHandler = require('../../index.js');
 module.export = {
   name: 'vip',
   description: 'Promote a participant to a VIP particpant',

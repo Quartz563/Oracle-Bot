@@ -31,29 +31,29 @@ Reflect.defineProperty(memberCollection, 'add', {
 		const user = collection.get(id);
 		if(!user){
 				const newUser = await Users.create({user_id: id, role: role});
-				userCollection.set(id, newUser);
+				memberCollection.set(id, newUser);
 				return newUser;
 		}
 	},
 });
 
 //queries their role for text output
-Reflect.defineProperty(userCollection, 'getRole', {
+Object.defineProperty(memberCollection, 'getRole', {
 	value: function getRole(id){
-			const user = userCollection.get(id);
+			const user = memberCollection.get(id);
 			return user ? user.role : 'Member not found';
 	},
 });
 
-
 //oracle activation and data sync
 oracle.login(TOKEN);
-oracle.on('ready', () => {
-		console.info(chalk.cyan('Obtaining information from the Precursor Planet Core...'));
+oracle.on('ready', async message => {
+	console.info(chalk.cyan('Obtaining information from the Precursor Planet Core...'));
 	const storedUsers = await Users.findAll();
-	storedUsers.forEach(u => storedUsers.set(u.user_id, u));
+	storedUsers.forEach(u => memberCollection.set(u.user_id, u));
 	console.info(chalk.green('Information Obtained -- User data syned successfully.'));
   console.info(chalk.hex('#CC6014')(`The Oracle awakens. The Precursors have begun to speak.`));
+	oracle.user.setActivity('Awaiting the one with the light');
 });
 
 //says what it does on the tin
@@ -76,6 +76,17 @@ oracle.on('message', message => {
 //if exists or has another name, create the command
   const command = oracle.commands.get(commandName) || oracle.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
   if (!command) return;
+
+	Object.defineProperty(oracle, 'roleLocked', {
+		writable: true,
+	  configurable: true
+	});
+
+	//handle an array
+	Reflect.defineProperty(oracle, 'roles', {
+		writable: true,
+	  configurable: true
+	});
 
 //execute commands only on server
   if(command.guildOnly && message.channel.type === 'dm'){
@@ -121,10 +132,8 @@ oracle.on('message', message => {
 //SELECT * FROM users WHERE user_id = authorID
 if(command.roleLocked){
 	try{
-		const query = await Users.findOne({where: {user_id: message.author.id}});
-		//collect specific role from database using query object
-		const role = query.get('role_type');
-		if(!oracle.commands.find(cmd => cmd.roles && cmd.roles.includes(role));){
+		const role = memberCollection.getRole(message.author.id);
+		if(!oracle.commands.find(cmd => cmd.roles && cmd.roles.includes(role))){
 			return message.channel.send(`You cannot use this command, ${message.author}`);
 		}
 	} catch (error) {

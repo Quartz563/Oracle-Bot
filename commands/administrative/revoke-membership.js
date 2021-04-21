@@ -1,4 +1,4 @@
-const mentionHandler = requires('./index.js')
+const mentionHandler = require('../../index.js');
 module.export = {
   name: 'revoke',
   description: 'revokes the member role on a certain user',

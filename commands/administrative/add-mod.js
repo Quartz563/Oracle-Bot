@@ -1,4 +1,4 @@
-const mentionHandler = requires('./index.js')
+const mentionHandler = require('../../index.js');
 module.export = {
   name: 'mod',
   description: 'Gives a specified user access to moderation commands',

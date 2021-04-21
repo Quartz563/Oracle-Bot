@@ -1,5 +1,5 @@
 require('dotenv').config();
-const PREFIX = process.env.PREFIX //note to self: change to dynamically updating one when possible
+const PREFIX = process.env.PREFIX //note to self: update the help menu to be role specific
 module.exports = {
   name: 'help',
   description: 'Lists all commands or info about a specific command.',
@@ -19,7 +19,7 @@ module.exports = {
           message.reply('I\'ve sent you a DM with all my commands!');
         })
         .catch(error => {
-          console.error(`Could not sedn help DM to ${message.author.tag}.\n`, error);
+          console.error(`Could not send help DM to ${message.author.tag}.\n`, error);
           message.reply('it seems like I cannot DM you! Do you have DMs disabled?');
         });
       } else {

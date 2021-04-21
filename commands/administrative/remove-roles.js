@@ -1,4 +1,4 @@
-const mentionHandler = requires('./index.js')
+const mentionHandler = require('../../index.js');
 module.export = {
   name: 'remove-core',
   description: 'Removes the member role from a specified user',
