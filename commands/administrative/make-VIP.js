@@ -1,5 +1,5 @@
 const mentionHandler = require('../../index.js');
-module.export = {
+module.exports = {
   name: 'vip',
   description: 'Promote a participant to a VIP particpant',
   args: true,
@@ -10,7 +10,7 @@ module.export = {
   roles: ['organiser', 'moderator', 'administrator'],
   execute(client, message, args){
     const role = message.guild.roles.cache.find(role => role.name === 'Participant VIP');
-    const member = getUserFromMention(args[1]);
+    const member = getUserFromMention(args[0]);
     member.roles.add(role);
     const user = client.users.cache.get(member);
     user.send({embed: {
@@ -24,7 +24,7 @@ module.export = {
       fields: [
         {
         name: 'Reason:',
-        value: args[2]
+        value: args[1]
       },
     ],
       timestamp: new Date(),

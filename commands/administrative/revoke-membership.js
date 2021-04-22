@@ -1,13 +1,13 @@
 const mentionHandler = require('../../index.js');
-module.export = {
+module.exports = {
   name: 'revoke',
   description: 'revokes the member role on a certain user',
   args: true,
   usage: '<user - given in form of @user> <reason>',
   aliases: ['revoke-member'],
   guildOnly: true,
-  //roleLocked: true,
-  //roles: ['moderator', 'administrator'],
+  roleLocked: true,
+  roles: ['moderator', 'administrator'],
   execute(client, message, args){
     const role = message.guild.roles.cache.find(role => role.name === 'Member');
     const member = getUserFromMention(args[0]);

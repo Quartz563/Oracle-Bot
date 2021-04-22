@@ -23,11 +23,10 @@ for (const folder of commandFolders) {
 const TOKEN = process.env.CLIENT_TOKEN;
 const PREFIX = process.env.PREFIX;
 
-
 //database functions
 //adds a new person specified on role if they do not exist
 Reflect.defineProperty(memberCollection, 'add', {
-	value: async function add(id, role){
+	value: async function addMember(id, role){
 		const user = collection.get(id);
 		if(!user){
 				const newUser = await Users.create({user_id: id, role_type: role});
@@ -147,3 +146,10 @@ if(command.roleLocked){
     message.reply('The Precursors could not decipher what you attempted (Invalid command!)');
   }
 });
+
+//exports variables and methods that can be used globally
+module.exports = {
+    memberCollection,
+		getUserFromMention,
+		Discord
+};

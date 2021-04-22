@@ -1,5 +1,5 @@
 const mentionHandler = require('../../index.js');
-module.export = {
+module.exports = {
   name: 'remove-core',
   description: 'Removes the member role from a specified user',
   args: true,

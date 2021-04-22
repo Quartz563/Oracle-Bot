@@ -1,5 +1,5 @@
 const mentionHandler = require('../../index.js');
-module.export = {
+module.exports = {
   name: 'organiser',
   description: 'promotes a user to the position of Organiser',
   args: true,

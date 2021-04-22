@@ -1,5 +1,5 @@
 const mentionHandler = require('../../index.js');
-module.export = {
+module.exports = {
   name: 'mod',
   description: 'Gives a specified user access to moderation commands',
   args: true,
