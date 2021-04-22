@@ -30,19 +30,31 @@ Reflect.defineProperty(memberCollection, 'add', {
 	value: async function add(id, role){
 		const user = collection.get(id);
 		if(!user){
-				const newUser = await Users.create({user_id: id, role: role});
-				memberCollection.set(id, newUser);
+				const newUser = await Users.create({user_id: id, role_type: role});
+				memberCollection.set(id, role);
 				return newUser;
 		}
 	},
 });
 
 //queries their role for text output
-Object.defineProperty(memberCollection, 'getRole', {
+Reflect.defineProperty(memberCollection, 'getRole', {
 	value: function getRole(id){
-			const user = memberCollection.get(id);
-			return user ? user.role : 'Member not found';
+			return memberCollection.get(id);
 	},
+});
+
+Object.defineProperty(oracle.commands, 'roleLocked', {
+	defaultValue: false,
+	writable: true,
+	configurable: true
+});
+
+//handle an array
+Object.defineProperty(oracle.commands, 'roles', {
+	defaultValue: ['member', 'organiser', 'moderator', 'administrator'],
+	writable: true,
+	configurable: true
 });
 
 //oracle activation and data sync
@@ -50,7 +62,7 @@ oracle.login(TOKEN);
 oracle.on('ready', async message => {
 	console.info(chalk.cyan('Obtaining information from the Precursor Planet Core...'));
 	const storedUsers = await Users.findAll();
-	storedUsers.forEach(u => memberCollection.set(u.user_id, u));
+	storedUsers.forEach(u => memberCollection.set(u.user_id, u.role_type));
 	console.info(chalk.green('Information Obtained -- User data syned successfully.'));
   console.info(chalk.hex('#CC6014')(`The Oracle awakens. The Precursors have begun to speak.`));
 	oracle.user.setActivity('Awaiting the one with the light');
@@ -61,7 +73,7 @@ function getUserFromMention(mention) {
 	const matches = mention.match(/^<@!?(\d+)>$/);
 	if (!matches) return;
 	const id = matches[1];
-	return client.users.cache.get(id);
+	return oracle.users.cache.get(id);
 }
 
 //basic command event handling
@@ -76,17 +88,6 @@ oracle.on('message', message => {
 //if exists or has another name, create the command
   const command = oracle.commands.get(commandName) || oracle.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
   if (!command) return;
-
-	Object.defineProperty(oracle, 'roleLocked', {
-		writable: true,
-	  configurable: true
-	});
-
-	//handle an array
-	Reflect.defineProperty(oracle, 'roles', {
-		writable: true,
-	  configurable: true
-	});
 
 //execute commands only on server
   if(command.guildOnly && message.channel.type === 'dm'){
@@ -129,16 +130,13 @@ oracle.on('message', message => {
   setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
 
 //checks database for specifc person authorisation
-//SELECT * FROM users WHERE user_id = authorID
 if(command.roleLocked){
-	try{
 		const role = memberCollection.getRole(message.author.id);
 		if(!oracle.commands.find(cmd => cmd.roles && cmd.roles.includes(role))){
+			console.log(`Unauthorised access of Precursor technology by ${message.author.username} with role ${role}`);
+			console.log(`Required minimum role: ${command.roles[0]}`);
 			return message.channel.send(`You cannot use this command, ${message.author}`);
 		}
-	} catch (error) {
-		console.error(error);
-	}
 }
 
 //command execution
