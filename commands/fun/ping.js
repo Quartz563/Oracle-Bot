@@ -1,9 +1,10 @@
 module.exports = {
   name: 'ping',
   description: 'Ping!',
-  cooldown: 5,
+  cooldown: 10,
+  roleLocked: true,
+  roles: ['member', 'organiser', 'moderator', 'administrator'],
   execute(client, msg, args) {
     msg.reply('pong');
-    msg.channel.send('pong');
   },
 };

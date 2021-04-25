@@ -40,7 +40,7 @@ module.exports = {
     //send a message to the administrative channel noting the changes
     message.channel.send({embed:{
       color: 0xCC6014,
-      description: `${args[0]} has been removed from the Member role`
+      description: `${member.username} has been removed from the Member role`
     }});
   },
 };

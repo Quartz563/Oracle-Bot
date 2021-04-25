@@ -1,4 +1,4 @@
-const mentionHandler = require('../../index.js');
+const index = require('../../index.js');
 module.exports = {
   name: 'core',
   description: "provides the two core roles (member and jak month) to users",
@@ -11,8 +11,9 @@ module.exports = {
   execute(client, message, args){
     const roleMem = message.guild.roles.cache.find(role => role.name === 'Member');
     const member = mentionHandler.getUserFromMention(args[0]);
-    member.roles.add(roleMem);
     const user = client.users.cache.get(member);
+    user.roles.add(roleMem);
+    index.memberCollection.updateMember(member, 'member');
     user.send({embed:{
       color: 0xCC6014,
       author: {

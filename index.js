@@ -25,9 +25,9 @@ const PREFIX = process.env.PREFIX;
 
 //database functions
 //adds a new person specified on role if they do not exist
-Reflect.defineProperty(memberCollection, 'add', {
+Reflect.defineProperty(memberCollection, 'addMember', {
 	value: async function addMember(id, role){
-		const user = collection.get(id);
+		const user = memberCollection.get(id);
 		if(!user){
 				const newUser = await Users.create({user_id: id, role_type: role});
 				memberCollection.set(id, role);
@@ -41,6 +41,20 @@ Reflect.defineProperty(memberCollection, 'getRole', {
 	value: function getRole(id){
 			return memberCollection.get(id);
 	},
+});
+
+Reflect.defineProperty(memberCollection, 'update', {
+	value: async function updateMember(id, role){
+		const user = memberCollection.get(id);
+		if(!user){
+			memberCollection.addMember(id, role);
+		} else {
+			memberCollection.delete(id);
+			const updateUser = await Users.upsert({user_id: id, role_type: role});
+			memberCollection.set(id, role);
+			return updateUser;
+		}
+	}
 });
 
 Object.defineProperty(oracle.commands, 'roleLocked', {
@@ -150,6 +164,5 @@ if(command.roleLocked){
 //exports variables and methods that can be used globally
 module.exports = {
     memberCollection,
-		getUserFromMention,
-		Discord
+		getUserFromMention
 };

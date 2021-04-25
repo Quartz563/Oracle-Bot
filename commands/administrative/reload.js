@@ -3,6 +3,9 @@ module.exports = {
 	name: 'reload',
 	description: 'Reloads a command',
 	args: true,
+	usage: '<command name>',
+	roleLocked: true,
+	roles: ['administrator'],
 	execute(client, message, args) {
 		const commandName = args[0].toLowerCase();
 		const command = message.client.commands.get(commandName)
