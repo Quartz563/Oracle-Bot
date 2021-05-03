@@ -7,7 +7,7 @@ module.exports = {
   usage: 'No arguments',
   guildOnly: true,
   roleLocked: true,
-  roles: ['administrator'],
+  roles: ['administrator', 'owner'],
   execute(client, message, args){
     message.channel.send('The time of dormancy has come once again...');
     console.log(chalk.hex('#CC6014')('The Oracle is shutting down.'));

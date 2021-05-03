@@ -7,7 +7,7 @@ module.exports = {
   aliases: ['whois', 'who', 'roles'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['member', 'organiser', 'moderator', 'administrator'],
+  roles: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
   execute(client, message, args){
     if(!args.length){
       const member = message.author;

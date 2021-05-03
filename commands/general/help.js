@@ -9,7 +9,7 @@ module.exports = {
   usage: '[command name]',
   cooldown: 5,
   roleLocked: true,
-  roles: ['member', 'organiser', 'moderator', 'administrator'],
+  roles: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
   execute(client, message, args){
     const cleanedCommands = new Discord.Collection();
     const {commands} = message.client;
@@ -19,7 +19,6 @@ module.exports = {
           cleanedCommands.set(command.name, command);
         }
       } else {
-        //could probably unspool this if needs be and condense it down more
         cleanedCommands.set(command.name, command);
       }
     });

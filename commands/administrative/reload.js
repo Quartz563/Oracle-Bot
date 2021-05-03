@@ -5,7 +5,7 @@ module.exports = {
 	args: true,
 	usage: '<command name>',
 	roleLocked: true,
-	roles: ['administrator'],
+	roles: ['administrator', 'owner'],
 	execute(client, message, args) {
 		const commandName = args[0].toLowerCase();
 		const command = message.client.commands.get(commandName)

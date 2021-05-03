@@ -3,11 +3,11 @@ module.exports = {
   name: 'vip',
   description: 'Promote a participant to a VIP particpant',
   args: true,
-  usage: '<user - given in form of @user> <reason>',
+  usage: '<user - given in form of @user>',
   aliases: ['promote-particpant', 'promote', 'viparticpiant'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['organiser', 'moderator', 'administrator'],
+  roles: ['organiser', 'moderator', 'administrator', 'owner'],
   execute(client, message, args){
     const role = message.guild.roles.cache.find(role => role.name === 'Participant VIP');
     const member = getUserFromMention(args[0]);

@@ -7,7 +7,7 @@ module.exports = {
   aliases: ['make-mod', 'moderator'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['administrator'],
+  roles: ['administrator', 'owner'],
   execute(client, message, args){
     if(args.length < 2){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${PREFIX}mod <@user> <mod|admin>\``);

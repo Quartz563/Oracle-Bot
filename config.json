@@ -1,0 +1,19 @@
+{
+  "roles": {
+    "member": "786518789814222878",
+    "jak_month": "787098632846966794",
+    "purgatory": "826527969337278526",
+    "particpiant": "786814271753158677",
+    "participant_video": "785130750054891571",
+    "participant_stream": "785202735377154048",
+    "participant_VIP": "784890969526501377",
+    "organiser": "786814160016900136",
+    "organiser_video": "784890888996388874",
+    "organiser_stream": "785329249464352819",
+    "peace_maker": "786812599668965386",
+    "moderator": "786430010842939422",
+    "administrator": "785130520308219964"
+  },
+"rules_channel_ID": "820972064701546516",
+"role_emote_ID": "834452840545648705"
+}

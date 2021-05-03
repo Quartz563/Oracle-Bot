@@ -7,7 +7,7 @@ module.exports = {
   aliases: ['make-organiser'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['moderator', 'administrator'],
+  roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
     if(args.length < 2){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${PREFIX}organiser <@user> <video|stream|both>\``);
@@ -38,7 +38,7 @@ module.exports = {
         icon_url: message.client.user.displayAvatarURL
       },
       title: 'Notice of Promotion',
-      description: `Welcome aboard the Moderator team, ${user.username}!`,
+      description: `Welcome aboard the Organiser team, ${user.username}!`,
       fields: [
         {
           name: 'New Rank',
@@ -50,7 +50,7 @@ module.exports = {
         },
         {
           name: 'Rules',
-          value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow mods or admins to see what's what'
+          value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow organisers, mods or admins to see what's what'
         }
       ],
       timestamp: new Date(),
@@ -61,7 +61,7 @@ module.exports = {
     }});
     message.channel.send({embed: {
       colour: 0xCC6014,
-      description: `${user.username} has been granted the ${args[1]} role`
+      description: `${user.username} has been granted the ${args[1]} organiser role`
     }});
   },
 };

@@ -7,7 +7,7 @@ module.exports = {
   aliases: ['revoke-member'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['moderator', 'administrator'],
+  roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
     const role = message.guild.roles.cache.find(role => role.name === 'Member');
     const member = getUserFromMention(args[0]);

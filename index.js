@@ -6,7 +6,7 @@ const oracle = new Discord.Client();
 oracle.commands = new Discord.Collection();
 oracle.cooldowns = new Discord.Collection();
 const memberCollection = new Discord.Collection();
-const { Users, Content} = require('./dbObjects');
+const { Users, Content } = require('./dbObjects');
 const  { Op } = require('sequelize');
 
 //primary command loops
@@ -18,6 +18,18 @@ for (const folder of commandFolders) {
 		oracle.commands.set(command.name, command);
 	}
 }
+
+const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith(.js));
+for(const file of eventFiles){
+	const eventFile = require(`./events/${file}`);
+	if(eventFile.once){
+		client.once(eventFile.name, (...args) => eventFile.execute(...args, oracle));
+	} else {
+		event.on(eventFile.name, (...args) => eventFile.execute(...args, oracle));
+	}
+}
+
+
 
 //variables from env file
 const TOKEN = process.env.CLIENT_TOKEN;
@@ -65,21 +77,13 @@ Object.defineProperty(oracle.commands, 'roleLocked', {
 
 //handle an array
 Object.defineProperty(oracle.commands, 'roles', {
-	defaultValue: ['member', 'organiser', 'moderator', 'administrator'],
+	defaultValue: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
 	writable: true,
 	configurable: true
 });
 
 //oracle activation and data sync
 oracle.login(TOKEN);
-oracle.on('ready', async message => {
-	console.info(chalk.cyan('Obtaining information from the Precursor Planet Core...'));
-	const storedUsers = await Users.findAll();
-	storedUsers.forEach(u => memberCollection.set(u.user_id, u.role_type));
-	console.info(chalk.green('Information Obtained -- User data syned successfully.'));
-  console.info(chalk.hex('#CC6014')(`The Oracle awakens. The Precursors have begun to speak.`));
-	oracle.user.setActivity('Awaiting the one with the light');
-});
 
 //says what it does on the tin
 function getUserFromMention(mention) {

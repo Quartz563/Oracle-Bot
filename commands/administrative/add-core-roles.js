@@ -7,7 +7,7 @@ module.exports = {
   aliases: ['new', 'member', 'new-member'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['moderator', 'administrator'],
+  roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
     const roleMem = message.guild.roles.cache.find(role => role.name === 'Member');
     const member = mentionHandler.getUserFromMention(args[0]);

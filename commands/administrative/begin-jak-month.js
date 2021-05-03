@@ -5,7 +5,7 @@ module.exports = {
   aliases: ['begin', 'bjm'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['administrator'],
+  roles: ['administrator', 'owner'],
   execute(client, message, args){
     message.guild.members.fetch().then(fetchedMembers => {
 	   const usersWithMember = fetchedMembers.filter(member => member.roles.cache.some(role => role.name === 'Member'));
