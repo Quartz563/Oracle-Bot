@@ -60,7 +60,7 @@ module.exports = {
          	.setFooter("Praise be the Precursors", message.client.user.displayAvatarURL);
 
         if(command.description){
-          helpEmbed.setDescription(command.description)
+          helpEmbed.setDescription(command.description);
         }
 
         if(command.aliases){

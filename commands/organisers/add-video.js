@@ -1,4 +1,5 @@
 const {VideoCollection, Content } = require('../../dbObjects');
+const Discord = require('discord.js');
 const reactionHandler = require('../../reactionHandler');
 module.exports = {
   name: 'add-video',
@@ -9,16 +10,10 @@ module.exports = {
   guildOnly: true,
   roleLocked: true,
   roles: ['organiser', 'moderator', 'administrator', 'owner'],
-  execute(client, message, args){
-    /*todo: first check if the args length is correct
-      next check if the UIN exists already within the database
-        -> check if they wish to override?
-      if both are clear and fine, then upsert content *THEN* upsert videoCollection
-    */
+  async execute(client, message, args){
     if(args.length < 3){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${PREFIX}add-video <link> <Unique Identifier Name>\``);
     }
-    //now we do our database check
     try{
       const newVideo = await Content.create({
         video_lable: args[1],
@@ -32,9 +27,32 @@ module.exports = {
       return message.reply(`Video ${newVideo.name} added.`)
     } catch (e){
       if(e.name === 'SequelizeUniqueConstraintError'){
-        //video already exists, override?
-        //emote handler class for this
-        reactionHandler.createOverrideReaction
+        const errorEmbed = new Discord.MessageEmbed()
+         .setColor(0xCC6014)
+         .setTitle('Warning')
+         .setDescription(`This entry already exists within the database! Override?`)
+         .setAuthor(message.client.user.username, message.client.user.displayAvatarURL)
+         .setTimestamp()
+         .setFooter("Praise be the Precursors", message.client.user.displayAvatarURL);
+        if(reactionHandler.createOverrideReaction(message.author.id, errorEmbed) == true){
+          const updatedVideo = await Content.update({
+            video_lable: args[1],
+            video_link: args[0],
+            particpiant: args[3],
+          });
+          const video = await VideoCollection.update({
+            user_id: message.author.id,
+            video_id: newVideo.video_lable,
+          });
+        } else {
+          const resolvedEmbed = new Discord.MessageEmbed()
+           .setColor(0xCC6014)
+           .setDescription(`Operation cancelled.`)
+           .setAuthor(message.client.user.username, message.client.user.displayAvatarURL)
+           .setTimestamp()
+           .setFooter("Praise be the Precursors", message.client.user.displayAvatarURL);
+          errorEmbed.edit(resolvedEmbed);
+        }
       }
     }
 

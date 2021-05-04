@@ -46,7 +46,7 @@ module.exports = {
         },
         {
           name: 'Rules',
-          value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow mods or admins to see what's what'
+          value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow mods or admins to see what\'s what'
         }
       ],
       timestamp: new Date(),

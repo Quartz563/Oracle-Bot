@@ -1,13 +1,23 @@
 const chalk = require('chalk');
+const index = require('../index.js');
 const config = require('../config.json');
 const ft = require('fs');
+const { Users } = require('../dbObjects');
+require('dotenv').config();
+
 module.exports = {
   name: 'ready',
   once: true,
   async execute(client) {
     console.info(chalk.cyan('Obtaining information from the Precursor Planet Core...'));
-  	const storedUsers = await Users.findAll();
-  	storedUsers.forEach(u => memberCollection.set(u.user_id, u.role_type));
+    try{
+      const storedUsers = await Users.findAll();
+      index.memberCollection.populate(storedUsers);
+    } catch(e){
+      console.info(chalk.red('Unable to obtain information from Precursor Planet Core.'));
+      console.error(e);
+      process.exit();
+    }
   	console.info(chalk.green('Information Obtained -- User data syned successfully.'));
     console.info(chalk.hex('#CC6014')(`The Oracle awakens. The Precursors have begun to speak.`));
   	oracle.user.setActivity('Awaiting the one with the light');
@@ -26,7 +36,6 @@ module.exports = {
         fs.writeFileSync('../config.json', config);
         sent.react(config.reaction_ID);
       });
-
     }
   },
 }

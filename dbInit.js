@@ -19,7 +19,7 @@ sequelize.sync({force}).then(async () =>{
 		adminCollection.upsert({user_id:'279541141324562433', role_type:'owner'}), //martin
 		adminCollection.upsert({user_id:'443042516963426306', role_type:'administrator'}), //zeke
 		adminCollection.upsert({user_id:'201899016697413634', role_type:'administrator'}), //pickle
-		adminCollection.upsert({user_id:'155397399345496064', role_type:'administrator'}) //quartz
+		//adminCollection.upsert({user_id:'155397399345496064', role_type:'administrator'}) //quartz
 	]
 	await Promise.all(admins)
   console.log('The Precursors have harmonised their offerings (Database synced)');

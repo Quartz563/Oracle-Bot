@@ -1,4 +1,4 @@
-const index = require('../../index.js');
+const index = require('../index.js');
 module.exports = {
   name: 'messageReactionAdd',
   once: false,
