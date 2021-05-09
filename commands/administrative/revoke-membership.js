@@ -12,6 +12,7 @@ module.exports = {
     const role = message.guild.roles.cache.find(role => role.name === 'Member');
     const member = getUserFromMention(args[0]);
     member.roles.remove(role);
+    //members.roles.add(purgatory); < not finished yet 
     const user = client.users.cache.get(member);
     user.send({embed: {
       color: 0xCC6014,

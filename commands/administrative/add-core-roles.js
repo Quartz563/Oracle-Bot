@@ -9,7 +9,7 @@ module.exports = {
   roleLocked: true,
   roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
-    const roleMem = message.guild.roles.cache.find(role => role.name === 'Member');
+    const roleMem = message.guild.roles.cache.find(role => role.id === index.config.roles.member);
     const member = index.getUserFromMention(args[0]);
     const user = client.users.cache.get(member);
     user.roles.add(roleMem);

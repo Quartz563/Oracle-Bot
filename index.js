@@ -1,12 +1,30 @@
 require('dotenv').config();
 const chalk = require('chalk');
 const fs = require('fs');
+const config = require("./config.json");
 const Discord = require('discord.js');
 const oracle = new Discord.Client();
 const memberCollection = new Discord.Collection();
 const { Users, Content } = require('./dbObjects');
 const  { Op } = require('sequelize');
 
+module.exports = {
+    memberCollection,
+		getUserFromMention,
+    config
+};
+
+oracle.commands = new Discord.Collection();
+oracle.cooldowns = new Discord.Collection();
+
+const commandFolders = fs.readdirSync('./commands');
+for (const folder of commandFolders) {
+  const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+  for (const file of commandFiles) {
+    const command = require(`./commands/${folder}/${file}`);
+    oracle.commands.set(command.name, command);
+  }
+}
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 for(const file of eventFiles){
 	const event = require(`./events/${file}`);
@@ -26,7 +44,6 @@ function getUserFromMention(mention) {
 
 //variables from env file
 const TOKEN = process.env.CLIENT_TOKEN;
-const PREFIX = process.env.PREFIX;
 
 //database functions
 //adds a new person specified on role if they do not exist
@@ -69,26 +86,9 @@ Reflect.defineProperty(memberCollection, 'populate', {
 	}
 });
 
-Object.defineProperty(oracle.commands, 'roleLocked', {
-	defaultValue: false,
-	writable: true,
-	configurable: true
-});
-
-//handle an array
-Object.defineProperty(oracle.commands, 'roles', {
-	defaultValue: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
-	writable: true,
-	configurable: true
-});
-
 //oracle activation and data sync
 oracle.login(TOKEN);
 
 
 
 //exports variables and methods that can be used globally
-module.exports = {
-    memberCollection,
-		getUserFromMention
-};

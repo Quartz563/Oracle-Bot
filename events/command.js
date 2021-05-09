@@ -1,26 +1,29 @@
 const Discord = require('discord.js');
 require('dotenv').config();
 const fs = require('fs');
-const oracle = new Discord.Client();
-oracle.commands = new Discord.Collection();
-oracle.cooldowns = new Discord.Collection();
 
 const PREFIX = process.env.PREFIX;
 
-//primary command loops
-const commandFolders = fs.readdirSync('./commands');
-for (const folder of commandFolders) {
-	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
-	for (const file of commandFiles) {
-		const command = require(`./commands/${folder}/${file}`);
-		oracle.commands.set(command.name, command);
-	}
-}
 
 module.exports = {
   name: 'message',
   once: false,
   execute(message, oracle){
+
+
+		Object.defineProperty(oracle.commands, 'roleLocked', {
+			defaultValue: false,
+			writable: true,
+			configurable: true
+		});
+
+		//handle an array
+		Object.defineProperty(oracle.commands, 'roles', {
+			defaultValue: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
+			writable: true,
+			configurable: true
+		});
+
     if(!message.content.startsWith(PREFIX) || message.author.oracle) return;
     const args = message.content.slice(PREFIX.length).trim().split(/ +/);
     const commandName = args.shift().toLowerCase();
