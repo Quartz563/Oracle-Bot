@@ -1,4 +1,5 @@
 const index = require('../../index.js');
+const config = require('../../config.json');
 module.exports = {
   name: 'core',
   description: "provides the two core roles (member and jak month) to users",
@@ -9,9 +10,10 @@ module.exports = {
   roleLocked: true,
   roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
-    const roleMem = message.guild.roles.cache.find(role => role.id === index.config.roles.member);
+    const guild = client.guilds.cache.get(config.guild_ID);
+    const roleMem = message.guild.roles.cache.find(role => role.id === config.roles.member);
     const member = index.getUserFromMention(args[0]);
-    const user = client.users.cache.get(member);
+    const user = guild.member(member);
     user.roles.add(roleMem);
     index.memberCollection.updateMember(member, 'member');
     user.send({embed:{

@@ -1,4 +1,5 @@
 const mentionHandler = require('../../index.js');
+const config = require('../../config.json');
 module.exports = {
   name: 'revoke',
   description: 'revokes the member role on a certain user',
@@ -9,11 +10,13 @@ module.exports = {
   roleLocked: true,
   roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
-    const role = message.guild.roles.cache.find(role => role.name === 'Member');
+    const guild = client.guilds.cache.get(config.guild_ID);
+    const role = message.guild.roles.cache.find(role => role == config.roles.member);
+    const purg = guild.roles.cache.find(role => role == config.roles.purgatory);
     const member = getUserFromMention(args[0]);
-    member.roles.remove(role);
-    //members.roles.add(purgatory); < not finished yet 
-    const user = client.users.cache.get(member);
+    let user = guild.member(member);
+    user.roles.remove(role);
+    user.roles.add(purgatory);
     user.send({embed: {
       color: 0xCC6014,
       author: {

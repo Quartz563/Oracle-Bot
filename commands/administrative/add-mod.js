@@ -1,4 +1,5 @@
 const index = require('../../index.js');
+const config = require('../../config.json');
 module.exports = {
   name: 'mod',
   description: 'Gives a specified user access to moderation commands',
@@ -12,11 +13,12 @@ module.exports = {
     if(args.length < 2){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${PREFIX}mod <@user> <mod|admin>\``);
     }
-    const PCRole = message.guild.roles.cache.find(role => role.name === 'Peace Keeper');
-    const ModRole = message.guild.roles.cache.find(role => role.name === 'Moderator');
-    const AdminRole = message.guild.roles.cache.find(role => role.name === 'Admin');
+    const guild = client.guilds.cache.get(config.guild_ID);
+    const PCRole = message.guild.roles.cache.find(role => role == config.roles.peace_maker);
+    const ModRole = message.guild.roles.cache.find(role => role == config.roles.moderator);
+    const AdminRole = message.guild.roles.cache.find(role => role == config.roles.administrator);
     const newMod = index.getUserFromMention(args[0]);
-    const user = client.users.cache.get(newMod);
+    const user = guild.member(newMod);
     if(args[1].toUpperCase() === 'ADMIN'){
       index.memberCollection.updateMember(newMod, 'administrator');
       user.roles.add(AdminRole);

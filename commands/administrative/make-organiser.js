@@ -1,4 +1,5 @@
 const mentionHandler = require('../../index.js');
+const config = require('../../config.json');
 module.exports = {
   name: 'organiser',
   description: 'promotes a user to the position of Organiser',
@@ -12,11 +13,12 @@ module.exports = {
     if(args.length < 2){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${PREFIX}organiser <@user> <video|stream|both>\``);
     }
+    const guild = client.guilds.cache.get(config.guild_ID);
     const newOrganiser = index.getUserFromMention(args[0]);
-    const user = client.users.cache.get(newOrganiser);
-    const OrgRole = message.guild.roles.cache.find(role => role.name === 'Organisers');
-    const OrgStrRole = message.guild.roles.cache.find(role => role.name === 'Organiser: Stream');
-    const OrgVidRole = message.guild.roles.cache.find(role => role.name === 'Organiser: Video');
+    const user = guild.member(newOrganiser);
+    const OrgRole = message.guild.roles.cache.find(role => role == config.roles.organiser);
+    const OrgStrRole = message.guild.roles.cache.find(role => role == config.roles.organiser_stream);
+    const OrgVidRole = message.guild.roles.cache.find(role => role == config.roles.organiser_video);
     if(args[1].toUpperCase() === 'VIDEO'){
       index.memberCollection.updateMember(newOrganiser, 'organiser');
       user.roles.add(OrgRoleVid);

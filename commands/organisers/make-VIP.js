@@ -9,10 +9,11 @@ module.exports = {
   roleLocked: true,
   roles: ['organiser', 'moderator', 'administrator', 'owner'],
   execute(client, message, args){
-    const role = message.guild.roles.cache.find(role => role.name === 'Participant VIP');
+    const guild = client.guilds.cache.get(config.guild_ID);
+    const role = message.guild.roles.cache.find(role => role == config.roles.participant_VIP);
     const member = getUserFromMention(args[0]);
-    member.roles.add(role);
-    const user = client.users.cache.get(member);
+    const user = guild.member(member);
+    user.roles.add(role);
     user.send({embed: {
       color: 0xCC6014,
       author: {
@@ -21,12 +22,6 @@ module.exports = {
       },
       title: 'Notice of Promotion!',
       description: "You have been deemed worthy of the VIP Participant rank!",
-      fields: [
-        {
-        name: 'Reason:',
-        value: args[1]
-      },
-    ],
       timestamp: new Date(),
       footer: {
         icon_url: message.client.user.displayAvatarURL,

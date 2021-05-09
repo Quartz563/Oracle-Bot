@@ -1,4 +1,5 @@
 const mentionHandler = require('../../index.js');
+const config = require('../../config.json');
 module.exports = {
   name: 'remove-mod',
   description: 'Removes the moderation role from a specified user - Avaliable roles: mod, admin',
@@ -12,11 +13,12 @@ module.exports = {
     if(args.length < 3){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${PREFIX}remove-mod <@user> <mod|admin>\``);
     }
-    const PCRole = message.guild.roles.cache.find(role => role.name === 'Peace Keeper');
-    const ModRole = message.guild.roles.cache.find(role => role.name === 'Moderator');
-    const AdminRole = message.guild.roles.cache.find(role => role.name === 'Admin');
+    const guild = client.guilds.cache.get(config.guild_ID);
+    const PCRole = message.guild.roles.cache.find(role => role == config.roles.peace_maker);
+    const ModRole = message.guild.roles.cache.find(role => role == config.roles.moderator);
+    const AdminRole = message.guild.roles.cache.find(role => role == config.roles.administrator);
     const oldMod = index.getUserFromMention(args[0]);
-    const user = client.users.cache.get(oldMod);
+    const user = guild.member(oldMod);
     if(args[1].toUpperCase() === 'ADMIN'){
       index.memberCollection.updateMember(oldMod, 'member');
       user.roles.remove(AdminRole);

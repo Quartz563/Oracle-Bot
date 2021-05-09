@@ -22,13 +22,26 @@ module.exports = {
     console.info(chalk.hex('#CC6014')(`The Oracle awakens. The Precursors have begun to speak.`));
   	client.user.setActivity('Awaiting the one with the light');
     //todo check for reaction message, if exists: cache, else post new message and store ID for cache
-    if(!config.hasOwnProperty("react_message_id")){
+    if(config.hasOwnProperty("react_message_ID")){
+      client.channels.cache.get(config.rules_channel_ID).messages.fetch(config.react_message_ID);
+    } else {
       const channel = client.channels.cache.get(config.rules_channel_ID);
       channel.send({embed:{
         color: 0xCC6014,
         description: 'React with the emote below to be given the member role!'
       }}).then(sent => {
         sent.react(config.reaction_ID);
+        fs.readFile("config.json", "utf8", (err, data) => {
+          if (err) throw err;
+          let obj = JSON.parse(data);
+          obj.react_message_ID = sent.id;
+          let stringifiedObj = JSON.stringify(obj);
+          console.log(stringifiedObj);
+          fs.writeFile("config.json", stringifiedObj, (err) => {
+            if (err) throw err
+            else console.log('saved file');
+          });
+        });
       });
     }
   },

@@ -3,15 +3,14 @@ const chalk = require('chalk');
 const fs = require('fs');
 const config = require("./config.json");
 const Discord = require('discord.js');
-const oracle = new Discord.Client();
+const oracle = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 const memberCollection = new Discord.Collection();
 const { Users, Content } = require('./dbObjects');
 const  { Op } = require('sequelize');
 
 module.exports = {
     memberCollection,
-		getUserFromMention,
-    config
+		getUserFromMention
 };
 
 oracle.commands = new Discord.Collection();
@@ -65,7 +64,7 @@ Reflect.defineProperty(memberCollection, 'getRole', {
 	},
 });
 
-Reflect.defineProperty(memberCollection, 'update', {
+Reflect.defineProperty(memberCollection, 'updateMember', {
 	value: async function updateMember(id, role){
 		const user = memberCollection.get(id);
 		if(!user){
@@ -85,6 +84,15 @@ Reflect.defineProperty(memberCollection, 'populate', {
 		return memberCollection;
 	}
 });
+
+Reflect.defineProperty(membercollection, 'remove', {
+  value: async function remove(user){
+    memberCollection.delete(user);
+    const delUser = await Users.destroy({where: {user_id: user}});
+    return memberCollection;
+  }
+});
+
 
 //oracle activation and data sync
 oracle.login(TOKEN);
