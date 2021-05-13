@@ -8,9 +8,15 @@ const memberCollection = new Discord.Collection();
 const { Users, Content } = require('./dbObjects');
 const  { Op } = require('sequelize');
 
+//variables from env file
+const TOKEN = process.env.CLIENT_TOKEN;
+const PREFIX = process.env.PREFIX;
+
+//exports variables and methods that can be used globally
 module.exports = {
     memberCollection,
-		getUserFromMention
+		getUserFromMention,
+    PREFIX
 };
 
 oracle.commands = new Discord.Collection();
@@ -41,9 +47,6 @@ function getUserFromMention(mention) {
 	return oracle.users.cache.get(id);
 }
 
-//variables from env file
-const TOKEN = process.env.CLIENT_TOKEN;
-
 //database functions
 //adds a new person specified on role if they do not exist
 Reflect.defineProperty(memberCollection, 'addMember', {
@@ -60,7 +63,11 @@ Reflect.defineProperty(memberCollection, 'addMember', {
 //queries their role for text output
 Reflect.defineProperty(memberCollection, 'getRole', {
 	value: function getRole(id){
-			return memberCollection.get(id);
+    if(!memberCollection.get(id)){
+      return console.log('Error - user not found');
+    } else {
+      return memberCollection.get(id);
+    }
 	},
 });
 
@@ -85,7 +92,7 @@ Reflect.defineProperty(memberCollection, 'populate', {
 	}
 });
 
-Reflect.defineProperty(membercollection, 'remove', {
+Reflect.defineProperty(memberCollection, 'remove', {
   value: async function remove(user){
     memberCollection.delete(user);
     const delUser = await Users.destroy({where: {user_id: user}});
@@ -93,10 +100,17 @@ Reflect.defineProperty(membercollection, 'remove', {
   }
 });
 
+Object.defineProperty(oracle.commands, 'roleLocked', {
+  defaultValue: false,
+  writable: true,
+  configurable: true
+});
+
+Object.defineProperty(oracle.commands, 'roles', {
+  defaultValue: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
+  writable: true,
+  configurable: true
+});
 
 //oracle activation and data sync
 oracle.login(TOKEN);
-
-
-
-//exports variables and methods that can be used globally

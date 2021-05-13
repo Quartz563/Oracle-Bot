@@ -19,7 +19,7 @@ function createOverrideReaction(user, message){
   message.react('✅').then(r => {message.react('❌');});
   message.awaitReactions((reaction, user) => user.id === message.author.id && (reaction.emoji.name == '✅' || reaction.emote.name == '❌'),
   {max: 1, time: 30000}).then(collected => {
-    if(collected.first().emoji.name == '✔') {
+    if(collected.first().emoji.name == '✅') {
       return true;
     } else {
       return false;

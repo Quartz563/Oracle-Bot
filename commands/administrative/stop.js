@@ -1,9 +1,9 @@
 const chalk = require('chalk');
 module.exports = {
-  name: 'stop',
+  name: 'shutdown',
   description: 'shuts the bot down',
   args: false,
-  aliases: ['shutdown', 'stop-bot'],
+  aliases: ['stop', 'stop-bot'],
   usage: 'No arguments',
   guildOnly: true,
   roleLocked: true,

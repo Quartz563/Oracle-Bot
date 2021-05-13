@@ -1,28 +1,14 @@
 const Discord = require('discord.js');
 require('dotenv').config();
 const fs = require('fs');
+const index = require('../index.js');
 
 const PREFIX = process.env.PREFIX;
-
 
 module.exports = {
   name: 'message',
   once: false,
   execute(message, oracle){
-
-
-		Object.defineProperty(oracle.commands, 'roleLocked', {
-			defaultValue: false,
-			writable: true,
-			configurable: true
-		});
-
-		//handle an array
-		Object.defineProperty(oracle.commands, 'roles', {
-			defaultValue: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
-			writable: true,
-			configurable: true
-		});
 
     if(!message.content.startsWith(PREFIX) || message.author.oracle) return;
     const args = message.content.slice(PREFIX.length).trim().split(/ +/);
@@ -38,6 +24,18 @@ module.exports = {
   //execute commands only on server
     if(command.guildOnly && message.channel.type === 'dm'){
       return message.reply('I can\'t execute that command inside DMs!');
+    }
+
+    //checks database for specifc person authorisation
+    if(command.roleLocked){
+    		const role = index.memberCollection.getRole(message.author.id);
+    		if(command.roles && command.roles.includes(role)){
+    			console.log(`Command usage authorised: role: ${role}, minimum required: ${command.roles[0]}`);
+    		} else {
+          console.log(`Unauthorised access of Precursor technology by ${message.author.username} with role ${role}`);
+    			console.log(`Required minimum role: ${command.roles[0]}`);
+    			return message.channel.send(`You cannot use this command, ${message.author}, as you do not have permissions for it!`);
+        }
     }
 
   //permissions required to execute command
@@ -74,16 +72,6 @@ module.exports = {
     }
     timestamps.set(message.author.id, now);
     setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
-
-  //checks database for specifc person authorisation
-  if(command.roleLocked){
-  		const role = memberCollection.getRole(message.author.id);
-  		if(!oracle.commands.find(cmd => cmd.roles && cmd.roles.includes(role))){
-  			console.log(`Unauthorised access of Precursor technology by ${message.author.username} with role ${role}`);
-  			console.log(`Required minimum role: ${command.roles[0]}`);
-  			return message.channel.send(`You cannot use this command, ${message.author}`);
-  		}
-  }
 
   //command execution
     try{

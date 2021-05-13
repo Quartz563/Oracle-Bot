@@ -36,7 +36,7 @@ module.exports = {
         }
       }});
     } else {
-      const member = index.getUserFromMention(args[0]);
+      const member = mainIndex.getUserFromMention(args[0]);
       message.channel.send({embed: {
         color: 0xCC6014,
         author: {
@@ -52,7 +52,7 @@ module.exports = {
           },
           {
           name: 'Roles',
-          value: userCollection.get(member.id),
+          value: mainIndex.memberCollection.getRole(member.id),
         }
       ],
         timestamp: new Date(),

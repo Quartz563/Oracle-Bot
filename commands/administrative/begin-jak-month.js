@@ -1,9 +1,9 @@
 const config = require('../../config.json');
 module.exports = {
-  name: 'begin-jak-month',
+  name: 'begin-jak',
   description: 'Applies the Jak Month role to all applicable members',
   args: false,
-  aliases: ['begin', 'bjm'],
+  aliases: ['begin-jak month', 'bjm'],
   guildOnly: true,
   roleLocked: true,
   roles: ['administrator', 'owner'],

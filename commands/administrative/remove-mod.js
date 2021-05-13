@@ -1,58 +1,93 @@
 const mentionHandler = require('../../index.js');
 const config = require('../../config.json');
+const Discord = require('discord.js');
+
 module.exports = {
-  name: 'remove-mod',
+  name: 'demote',
   description: 'Removes the moderation role from a specified user - Avaliable roles: mod, admin',
   args: true,
   usage: '<user - given in form of @user> <mod|admin> <reason>',
-  aliases: ['remove-admin', 'demote'],
+  aliases: ['remove-admin', 'remove-mod'],
   guildOnly: true,
   roleLocked: true,
   roles: ['administrator', 'owner'],
   execute(client, message, args){
     if(args.length < 3){
-      return message.reply(`Error - Insufficent arguments given. Usage: \`${PREFIX}remove-mod <@user> <mod|admin>\``);
+      return message.reply(`Error - Insufficent arguments given. Usage: \`${mentionHandler.PREFIX}remove-mod <@user> <mod|admin> <reason>\``);
     }
-    const guild = client.guilds.cache.get(config.guild_ID);
     const PCRole = message.guild.roles.cache.find(role => role == config.roles.peace_maker);
     const ModRole = message.guild.roles.cache.find(role => role == config.roles.moderator);
     const AdminRole = message.guild.roles.cache.find(role => role == config.roles.administrator);
-    const oldMod = index.getUserFromMention(args[0]);
-    const user = guild.member(oldMod);
-    if(args[1].toUpperCase() === 'ADMIN'){
-      index.memberCollection.updateMember(oldMod, 'member');
-      user.roles.remove(AdminRole);
-    } else if(args[1].toUpperCase() === 'MOD'){
-      index.memberCollection.updateMember(oldMod, 'member');
-      user.roles.remove(ModRole);
-    } else {
-      return message.reply(`Error - Invalid arguments given. Usage: \`${PREFIX}remove-mod <@user> <mod|admin>\``);
+    const oldMod = mentionHandler.getUserFromMention(args[0]);
+    const user = message.guild.member(oldMod);
+    var reason = '';
+
+    for (var i=2; i < args.length; ++i) {
+      reason += (' ' + args[i]);
     }
-    user.roles.remove(PCRole);
-    user.send({embed: {
-      color: 0xCC6014,
-      author: {
-        name: message.client.user.username,
-        icon_url: message.client.user.displayAvatarURL
-      },
-      title: 'Notice of Removal',
-      description: "Your access to the moderation team of the Jak Month discord has been revoked",
-      fields: [
-        {
-        name: 'Reason:',
-        value: args[1]
-      }
-    ],
-      timestamp: new Date(),
-      footer: {
-        icon_url: message.client.user.displayAvatarURL,
-        text: "Praise be the Precursors"
-      }
-    }});
-    //send a message to the administrative channel noting the changes
-    message.channel.send({embed:{
-      color: 0xCC6014,
-      description: `${member.username} has been removed from the Moderation Team`
-    }});
+
+    /*const messageEmbed = new Discord.MessageEmbed()
+      .setColor(0xCC6014)
+      .setTitle('Notice of Removal')
+      .setDescription(`Your access to the moderation team of the Jak Month discord has been revoked`)
+      .setAuthor(message.client.user.username, message.client.user.displayAvatarURL)
+      .setFields({name: 'Reason:',value: `${reason}`})
+      .setTimestamp()
+      .setFooter("Praise be the Precursors", message.client.user.displayAvatarURL);*/
+
+
+    if(args[1].toUpperCase() === 'ADMIN'){
+      mentionHandler.memberCollection.updateMember(user.id, 'member');
+      user.roles.remove(AdminRole);
+      user.roles.remove(PCRole);
+      user.send({embed:{
+        color: 0xCC6014,
+        author: {
+          name: message.client.user.username,
+          icon_url: message.client.user.displayAvatarURL
+        },
+        title: 'Notice of Removal',
+        description: `Your access to the moderation team of the Jak Month discord has been revoked`,
+        fields: [
+          {name: 'Reason:',value: `${reason}`}
+        ],
+        timestamp: new Date(),
+        footer: {
+          icon_url: message.client.user.displayAvatarURL,
+          text: 'Praise be the Precursors'
+        }
+      }});
+      message.channel.send({embed:{
+        color: 0xCC6014,
+        description: `${user.user.username} has been removed from the Moderation Team` //it makes no sense but it seems to work...
+      }});
+    } else if(args[1].toUpperCase() === 'MOD'){
+      mentionHandler.memberCollection.updateMember(user.id, 'member');
+      user.roles.remove(ModRole);
+      user.roles.remove(PCRole);
+      user.send({embed:{
+        color: 0xCC6014,
+        author: {
+          name: message.client.user.username,
+          icon_url: message.client.user.displayAvatarURL
+        },
+        title: 'Notice of Removal',
+        description: `Your access to the moderation team of the Jak Month discord has been revoked`,
+        fields: [
+          {name: 'Reason:',value: `${reason}`}
+        ],
+        timestamp: new Date(),
+        footer: {
+          icon_url: message.client.user.displayAvatarURL,
+          text: 'Praise be the Precursors'
+        }
+      }});
+      message.channel.send({embed:{
+        color: 0xCC6014,
+        description: `${user.user.username} has been removed from the Moderation Team`
+      }});
+    } else {
+      return message.reply(`Error - Invalid arguments given. Usage: \`${mentionHandler.PREFIX}remove-mod <@user> <mod|admin> <reason>\``);
+    }
   },
 };

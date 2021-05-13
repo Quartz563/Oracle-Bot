@@ -5,18 +5,27 @@ module.exports = {
   description: 'revokes the member role on a certain user',
   args: true,
   usage: '<user - given in form of @user> <reason>',
-  aliases: ['revoke-member'],
+  aliases: ['revoke-member', 'revoke-membership'],
   guildOnly: true,
   roleLocked: true,
   roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
-    const guild = client.guilds.cache.get(config.guild_ID);
-    const role = message.guild.roles.cache.find(role => role == config.roles.member);
-    const purg = guild.roles.cache.find(role => role == config.roles.purgatory);
-    const member = getUserFromMention(args[0]);
-    let user = guild.member(member);
+    if(args.length < 2){
+      return message.reply(`Error - Insufficent arguments given. Usage: \`${mentionHandler.PREFIX}revoke <user - given in form of @User> <reason>\``);
+    }
+    const memberRole = message.guild.roles.cache.find(role => role == config.roles.member);
+    const purg = message.guild.roles.cache.find(role => role == config.roles.purgatory);
+    const member = mentionHandler.getUserFromMention(args[0]);
+    let user = message.guild.member(member);
     user.roles.remove(role);
-    user.roles.add(purgatory);
+    user.roles.add(purg);
+    mentionHandler.memberCollection.updateMember(user.id, 'purgatory');
+    var reason = '';
+
+    for (var i=1; i < args.length; ++i) {
+      reason += (' ' + args[i]);
+    }
+
     user.send({embed: {
       color: 0xCC6014,
       author: {
@@ -28,7 +37,7 @@ module.exports = {
       fields: [
         {
         name: 'Reason:',
-        value: args[1]
+        value: `${reason}`
       },
       {
         name: 'Process of Appeal',
@@ -44,7 +53,7 @@ module.exports = {
     //send a message to the administrative channel noting the changes
     message.channel.send({embed:{
       color: 0xCC6014,
-      description: `${member.username} has been removed from the Member role`
+      description: `${user.user.username} has been removed from the Member role`
     }});
   },
 };
