@@ -28,6 +28,7 @@ module.exports = {
 
     if(args[1].toUpperCase() === 'VIDEO'){
       index.memberCollection.updateMember(user.id, 'participant');
+      user.roles.add(PartRole);
       user.roles.add(PartVidRole);
       user.send({embed: {
         color: 0xCC6014,
@@ -63,6 +64,7 @@ module.exports = {
       }});
     } else if(args[1].toUpperCase() === 'STREAM'){
       index.memberCollection.updateMember(user.id, 'participant');
+      user.roles.add(PartRole);
       user.roles.add(PartStrRole);
       user.send({embed: {
         color: 0xCC6014,
@@ -98,6 +100,7 @@ module.exports = {
       }});
     } else if(args[1].toUpperCase() === 'BOTH'){
       index.memberCollection.updateMember(user.id, 'participant');
+      user.roles.add(PartRole);
       user.roles.add(PartVidRole);
       user.roles.add(PartStrRole);
       user.send({embed: {

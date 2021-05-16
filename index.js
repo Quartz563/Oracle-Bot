@@ -55,7 +55,7 @@ Reflect.defineProperty(memberCollection, 'addMember', {
 		if(!user){
 				createNewUserEntry(id, role, 0, 0);
 				memberCollection.set(id, role);
-				return newUser;
+				return;
 		}
 	},
 });
@@ -98,9 +98,10 @@ Reflect.defineProperty(currency, 'add', {
         user.PC_balance += Number(amont);
         return user.save();
       }
+    } else {
+      createNewUserEntry(id, memberCollection.getRole(id), 1, 0);
+      currency.set(id, newUser);
     }
-    createNewUserEntry(id, role, 0, 0);
-    currency.set(id, newUser);
     return newUser;
   }
 });

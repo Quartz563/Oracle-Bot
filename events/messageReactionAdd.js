@@ -63,9 +63,9 @@ module.exports = {
                 }
               }});
           }
-            if(user != message.client.user){
+            /*if(user != message.client.user){
               reactionHandler.removeReaction(user.id, message);
-            }
+            }*/
         }
       }
     }
