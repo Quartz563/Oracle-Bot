@@ -58,7 +58,7 @@ module.exports = {
     //send a message to the administrative channel noting the changes
     channel.send({embed:{
       color: 0xCC6014,
-      description: `${user.user.username} has been removed from the Member role`
+      description: `${user.user.username} has been removed from the Member role for ${reason}`
     }});
   },
 };
