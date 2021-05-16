@@ -7,9 +7,11 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 	storage: 'database.sqlite',
 });
 
-const videoCollection = require('./models/content')(sequelize, Sequelize.DataTypes);
 const adminCollection = require('./models/users')(sequelize, Sequelize.DataTypes);
+const CurrencyShop = require('./models/CurrencyShop')(sequelize, Sequelize.DataTypes);
+require('./models/UserItems')(sequelize, Sequelize.DataTypes);
 require('./models/videoCollection')(sequelize, Sequelize.DataTypes);
+require('./models/content')(sequelize, Sequelize.DataTypes);
 
 const force = process.argv.includes('--force') || process.argv.includes('-f');
 
@@ -22,6 +24,10 @@ sequelize.sync({force}).then(async () =>{
 		adminCollection.upsert({user_id:'155397399345496064', role_type:'administrator'}) //quartz
 	]
 	await Promise.all(admins)
+	const shop = [
+		CurrencyShop.upsert({name: 'Seal of Mar', cost: 1})
+	]
+	await Promise.all(shop);
   console.log('The Precursors have harmonised their offerings (Database synced)');
   sequelize.close();
 }).catch(console.error);

@@ -15,11 +15,16 @@ module.exports = {
     if(args.length < 2){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${index.PREFIX}participant <@user> <video|stream|both>\``);
     }
-    const newparticipant = index.getUserFromMention(args[0]);
-    const user = message.guild.member(newparticipant);
+    const newParticipant = message.mentions.users.first();
+    if(newParticipant === undefined){
+      message.channel.send('Error - User not found');
+      return;
+    };
+    const user = message.guild.member(newParticipant);
     const PartRole = message.guild.roles.cache.find(role => role == config.roles.participant);
     const PartStrRole = message.guild.roles.cache.find(role => role == config.roles.participant_stream);
     const PartVidRole = message.guild.roles.cache.find(role => role == config.roles.participant_video);
+    const channel = client.channels.cache.get(config.bot_logs_ID);
 
     if(args[1].toUpperCase() === 'VIDEO'){
       index.memberCollection.updateMember(user.id, 'participant');
@@ -38,12 +43,12 @@ module.exports = {
             value: `You have been promoted to the rank of ${args[1]}, which comes with some new channels and responsibilities`
           },
           {
-            name: 'Commands',
-            value: `Your new position provides some new commands, use ${index.PREFIX}help to see what's new and read what they do`
+            name: 'Videos',
+            value: 'You have signed up to make some Videos! Details of the process will be given to you via the Organisers in charge of Videos.'
           },
           {
             name: 'Rules',
-            value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow organisers, mods or admins to see what\'s what'
+            value: 'The standard rules of the server still applies, but you have some new responsibilities too, all explained in the Welcome channel of the Jak Month Discord.'
           }
         ],
         timestamp: new Date(),
@@ -52,8 +57,8 @@ module.exports = {
           text: 'Praise be the Precursors'
         }
       }});
-      message.channel.send({embed: {
-        colour: 0xCC6014,
+      channel.send({embed: {
+        color: 0xCC6014,
         description: `${user.user.username} has been granted the ${args[1]} participant role`
       }});
     } else if(args[1].toUpperCase() === 'STREAM'){
@@ -73,12 +78,12 @@ module.exports = {
             value: `You have been promoted to the rank of ${args[1]}, which comes with some new channels and responsibilities`
           },
           {
-            name: 'Commands',
-            value: `Your new position provides some new commands, use ${index.PREFIX}help to see what's new and read what they do`
+            name: 'Streaming',
+            value: 'You have signed up to do some Streaming! Details of the process will be given to you via the Organisers in charge of Streaming.'
           },
           {
             name: 'Rules',
-            value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow organisers, mods or admins to see what\'s what'
+            value: 'The standard rules of the server still applies, but you have some new responsibilities too, all explained in the Welcome channel of the Jak Month Discord.'
           }
         ],
         timestamp: new Date(),
@@ -87,8 +92,8 @@ module.exports = {
           text: 'Praise be the Precursors'
         }
       }});
-      message.channel.send({embed: {
-        colour: 0xCC6014,
+      channel.send({embed: {
+        color: 0xCC6014,
         description: `${user.user.username} has been granted the ${args[1]} participant role`
       }});
     } else if(args[1].toUpperCase() === 'BOTH'){
@@ -106,15 +111,15 @@ module.exports = {
         fields: [
           {
             name: 'New Rank',
-            value: `You have been promoted to the rank of Participant for both categories, which comes with some new channels and responsibilities`
+            value: `You have been promoted to the rank of ${args[1]}, which comes with some new channels and responsibilities`
           },
           {
-            name: 'Commands',
-            value: `Your new position provides some new commands, use ${index.PREFIX}help to see what's new and read what they do`
+            name: 'Both Categories',
+            value: 'You have signed up to both categories! You will be quite busy, but Organisers from both Streaming and Videos are on hand to help you out'
           },
           {
             name: 'Rules',
-            value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow organisers, mods or admins to see what\'s what'
+            value: 'The standard rules of the server still applies, but you have some new responsibilities too, all explained in the Welcome channel of the Jak Month Discord.'
           }
         ],
         timestamp: new Date(),
@@ -123,8 +128,8 @@ module.exports = {
           text: 'Praise be the Precursors'
         }
       }});
-      message.channel.send({embed: {
-        colour: 0xCC6014,
+      channel.send({embed: {
+        color: 0xCC6014,
         description: `${user.user.username} has been granted the ${args[1]} participant role`
       }});
     } else {

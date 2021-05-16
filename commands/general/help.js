@@ -9,7 +9,7 @@ module.exports = {
   usage: '[command name]',
   cooldown: 5,
   roleLocked: true,
-  roles: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
+  roles: ['member', 'participant', 'organiser', 'moderator', 'administrator', 'owner'],
   execute(client, message, args){
     const cleanedCommands = new Discord.Collection();
     const {commands} = message.client;

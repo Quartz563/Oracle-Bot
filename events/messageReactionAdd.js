@@ -40,15 +40,20 @@ module.exports = {
                 fields: [
                   {
                     name: 'Partipate',
-                    value: 'Feel free to reach out to the organisers if you want to contribute to Jak Month!'
+                    value: 'Anyone is free to contribute to Jak month in any way they wish! Draw, write, stream, video or anything to show your love of the Jak and Daxter series!\
+                    All content will be shown in the discord regardless of if it is scheduled or user-submitted!'
+                  },
+                  {
+                    name: 'Scheduled Content',
+                    value: 'Want to have your content release as apart of the Jak Month schedule? Contact an Organiser to start discussions about you and your contibution!'
                   },
                   {
                     name: 'Community',
-                    value: 'We are all here in celebration of Jak and Daxter, so do not hestitate to engage with fellow fans!'
+                    value: 'We are all here in celebration of Jak and Daxter; so not only do we want you to engage with fellow fans, we actively encourage it!'
                   },
                   {
                     name: 'Rules',
-                    value: 'Please remember to keep the rules in mind while you are here!'
+                    value: 'Please remember to keep the rules in mind while you are here! The Precursors are watching...'
                   }
                 ],
                 timestamp: new Date(),

@@ -13,13 +13,22 @@ module.exports = {
     if(args.length < 1){
       return message.reply(`Error - Insufficent arguments given. Usage: \`${index.PREFIX}core <user - given in form of @User>\``);
     }
+    const channel = client.channels.cache.get(config.bot_logs_ID);
     const roleMem = message.guild.roles.cache.find(role => role.id === config.roles.member);
-    const member = index.getUserFromMention(args[0]);
+    const member = message.mentions.users.first();
+    if(member === undefined){
+      message.channel.send('Error - User not found');
+      return;
+    };
     const user = message.guild.member(member);
     user.roles.add(roleMem);
     if(user.roles.cache.some(role => role == config.roles.purgatory)){
       const purgRole = message.guild.roles.cache.find(role => role.id === config.roles.purgatory);
       user.roles.remove(purgRole);
+      channel.send({embed:{
+        color: 0xCC6014,
+        description: `${user.user.username} has been removed the purgatory role`
+      }});
     }
     index.memberCollection.updateMember(user.id, 'member');
     user.send({embed:{
@@ -33,15 +42,20 @@ module.exports = {
       fields: [
         {
           name: 'Partipate',
-          value: 'Feel free to reach out to the organisers if you want to contribute to Jak Month!'
+          value: 'Anyone is free to contribute to Jak month in any way they wish! Draw, write, stream, video or anything to show your love of the Jak and Daxter series!\
+           All content will be shown in the discord regardless of if it is scheduled or user-submitted!'
+        },
+        {
+          name: 'Scheduled Content',
+          value: 'Want to have your content release as apart of the Jak Month schedule? Contact an Organiser to start discussions about you and your contibution!'
         },
         {
           name: 'Community',
-          value: 'We are all here in celebration of Jak and Daxter, so do not hestitate to engage with fellow fans!'
+          value: 'We are all here in celebration of Jak and Daxter; so not only do we want you to engage with fellow fans, we actively encourage it!'
         },
         {
           name: 'Rules',
-          value: 'Please remember to keep the rules in mind while you are here!'
+          value: 'Please remember to keep the rules in mind while you are here! The Precursors are watching...'
         }
       ],
       timestamp: new Date(),
@@ -50,8 +64,8 @@ module.exports = {
         text: 'Praise be the Precursors'
       }
     }});
-    message.channel.send({embed: {
-      colour: 0xCC6014,
+    channel.send({embed: {
+      color: 0xCC6014,
       description: `${user.user.username} has been granted the Member role`
     }});
   },

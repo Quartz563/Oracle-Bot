@@ -13,6 +13,7 @@ module.exports = {
     try{
       const storedUsers = await Users.findAll();
       index.memberCollection.populate(storedUsers);
+      index.currency.populate(storedUsers);
     } catch(e){
       console.info(chalk.red('Unable to obtain information from Precursor Planet Core.'));
       console.error(e);
@@ -20,7 +21,7 @@ module.exports = {
     }
   	console.info(chalk.green('Information Obtained -- User data syned successfully.'));
     console.info(chalk.hex('#CC6014')(`The Oracle awakens. The Precursors have begun to speak.`));
-  	client.user.setActivity('Awaiting the one with the light');
+  	client.user.setActivity('Awaiting the true hero to return');
     //todo check for reaction message, if exists: cache, else post new message and store ID for cache
     if(config.hasOwnProperty("react_message_ID")){
       client.channels.cache.get(config.rules_channel_ID).messages.fetch(config.react_message_ID);

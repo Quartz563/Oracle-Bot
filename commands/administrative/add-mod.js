@@ -16,9 +16,22 @@ module.exports = {
     const PCRole = message.guild.roles.cache.find(role => role == config.roles.peace_maker);
     const ModRole = message.guild.roles.cache.find(role => role == config.roles.moderator);
     const AdminRole = message.guild.roles.cache.find(role => role == config.roles.administrator);
-    const newMod = index.getUserFromMention(args[0]);
+    const channel = client.channels.cache.get(config.bot_logs_ID);
+    const newMod = message.mentions.users.first();
+    if(newMod === undefined){
+      message.channel.send('Error - User not found');
+      return;
+    }
     const user = message.guild.member(newMod);
     if(args[1].toUpperCase() === 'ADMIN'){
+      if(user.roles.cache.some(role => role == config.roles.moderator)){
+        const purgRole = message.guild.roles.cache.find(role => role.id === config.roles.moderator);
+        user.roles.remove(purgRole);
+        channel.send({embed:{
+          color: 0xCC6014,
+          description: `${user.user.username} has been removed the Moderator role`
+        }});
+      }
       index.memberCollection.updateMember(user.id, 'administrator');
       user.roles.add(AdminRole);
       user.roles.add(PCRole);
@@ -29,7 +42,7 @@ module.exports = {
           icon_url: message.client.user.displayAvatarURL
         },
         title: 'Notice of Promotion',
-        description: `Welcome aboard the Moderator team, ${user.user.username}!`,
+        description: `Welcome aboard the Administrative team, ${user.user.username}!`,
         fields: [
           {
             name: 'New Rank',
@@ -41,7 +54,7 @@ module.exports = {
           },
           {
             name: 'Rules',
-            value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow mods or admins to see what\'s what'
+            value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow mods and admins to see what\'s what'
           }
         ],
         timestamp: new Date(),
@@ -50,7 +63,19 @@ module.exports = {
           text: 'Praise be the Precursors'
         }
       }});
+      channel.send({embed: {
+        color: 0xCC6014,
+        description: `${user.user.username} has been granted the ${args[1]} role`
+      }});
     } else if(args[1].toUpperCase() === 'MOD'){
+      if(user.roles.cache.some(role => role == config.roles.administrator)){
+        const purgRole = message.guild.roles.cache.find(role => role.id === config.roles.administrator);
+        user.roles.remove(purgRole);
+        channel.send({embed:{
+          color: 0xCC6014,
+          description: `${user.user.username} has been removed the Administrator role`
+        }});
+      }
       index.memberCollection.updateMember(user.id, 'moderator');
       user.roles.add(ModRole);
       user.roles.add(PCRole);
@@ -73,7 +98,7 @@ module.exports = {
           },
           {
             name: 'Rules',
-            value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow mods or admins to see what\'s what'
+            value: 'The standard rules of the server still applies, but you have some new guidelines to follow too, talk to your fellow mods and admins to see what\'s what'
           }
         ],
         timestamp: new Date(),
@@ -82,12 +107,12 @@ module.exports = {
           text: 'Praise be the Precursors'
         }
       }});
+      channel.send({embed: {
+        color: 0xCC6014,
+        description: `${user.user.username} has been granted the ${args[1]} role`
+      }});
     } else {
       return message.reply(`Error - Invalid arguments given. Usage: \`${index.PREFIX}mod <@user> <mod|admin>\``);
     }
-    message.channel.send({embed: {
-      colour: 0xCC6014,
-      description: `${user.user.username} has been granted the ${args[1]} role`
-    }});
   },
 };

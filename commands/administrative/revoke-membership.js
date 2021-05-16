@@ -1,4 +1,4 @@
-const mentionHandler = require('../../index.js');
+const index = require('../../index.js');
 const config = require('../../config.json');
 module.exports = {
   name: 'revoke',
@@ -11,15 +11,20 @@ module.exports = {
   roles: ['moderator', 'administrator', 'owner'],
   execute(client, message, args){
     if(args.length < 2){
-      return message.reply(`Error - Insufficent arguments given. Usage: \`${mentionHandler.PREFIX}revoke <user - given in form of @User> <reason>\``);
+      return message.reply(`Error - Insufficent arguments given. Usage: \`${index.PREFIX}revoke <user - given in form of @User> <reason>\``);
     }
+    const channel = client.channels.cache.get(config.bot_logs_ID);
     const memberRole = message.guild.roles.cache.find(role => role == config.roles.member);
     const purg = message.guild.roles.cache.find(role => role == config.roles.purgatory);
-    const member = mentionHandler.getUserFromMention(args[0]);
+    const member = message.mentions.users.first();
+    if(member === undefined){
+      message.channel.send('Error - User not found');
+      return;
+    };
     let user = message.guild.member(member);
-    user.roles.remove(role);
+    user.roles.remove(memberRole);
     user.roles.add(purg);
-    mentionHandler.memberCollection.updateMember(user.id, 'purgatory');
+    index.memberCollection.updateMember(user.id, 'purgatory');
     var reason = '';
 
     for (var i=1; i < args.length; ++i) {
@@ -51,7 +56,7 @@ module.exports = {
       }
     }});
     //send a message to the administrative channel noting the changes
-    message.channel.send({embed:{
+    channel.send({embed:{
       color: 0xCC6014,
       description: `${user.user.username} has been removed from the Member role`
     }});

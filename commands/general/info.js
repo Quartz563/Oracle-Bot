@@ -1,4 +1,5 @@
-const mainIndex = require('../../index.js');
+const index = require('../../index.js');
+
 module.exports = {
   name: 'info',
   description: 'Find information about a specific user',
@@ -7,8 +8,10 @@ module.exports = {
   aliases: ['whois', 'who', 'roles'],
   guildOnly: true,
   roleLocked: true,
-  roles: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
+  roles: ['member', 'participant', 'organiser', 'moderator', 'administrator', 'owner'],
   execute(client, message, args){
+    const orb = client.emojis.cache.get('834452840545648705');
+    const cell = client.emojis.cache.get('843521459514245150');
     if(!args.length){
       const member = message.author;
       message.channel.send({embed: {
@@ -26,7 +29,16 @@ module.exports = {
           },
           {
           name: 'Roles',
-          value: mainIndex.memberCollection.getRole(member.id),
+          value: index.memberCollection.getRole(member.id),
+        },
+        {
+          name: 'Wallet',
+          value: `${orb}${index.currency.getBalance(member.id, 'ORB')} Precursor Orb(s)`
+        },
+        {
+          name: '\u200B',
+          value: `${cell}${index.currency.getBalance(member.id, 'CELL')} Power Cell(s)`,
+          inline: true
         }
       ],
         timestamp: new Date(),
@@ -36,7 +48,11 @@ module.exports = {
         }
       }});
     } else {
-      const member = mainIndex.getUserFromMention(args[0]);
+      const member = message.mentions.users.first();
+      if(member === undefined){
+        message.channel.send('Error - User not found');
+        return;
+      }
       message.channel.send({embed: {
         color: 0xCC6014,
         author: {
@@ -52,7 +68,16 @@ module.exports = {
           },
           {
           name: 'Roles',
-          value: mainIndex.memberCollection.getRole(member.id),
+          value: index.memberCollection.getRole(member.id),
+        },
+        {
+          name: 'Wallet',
+          value: `${orb}${index.currency.getBalance(member.id, 'ORB')} Precursor Orb(s)`
+        },
+        {
+          name: '\u200B',
+          value: `${cell}${index.currency.getBalance(member.id, 'CELL')} Power Cell(s)`,
+          inline: true
         }
       ],
         timestamp: new Date(),

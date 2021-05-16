@@ -3,7 +3,7 @@ module.exports = {
 	description: 'Get the avatar URL of the tagged user(s), or your own avatar.',
 	aliases: ['icon', 'pfp'],
 	roleLocked: true,
-  roles: ['member', 'organiser', 'moderator', 'administrator', 'owner'],
+  roles: ['member', 'participant', 'organiser', 'moderator', 'administrator', 'owner'],
 	execute(client, message) {
 		if (!message.mentions.users.size) {
 			return message.channel.send(`Your avatar: <${message.author.displayAvatarURL}>`);

@@ -5,10 +5,19 @@ const index = require('../index.js');
 
 const PREFIX = process.env.PREFIX;
 
+function getUserFromMention(mention) {
+	const matches = mention.match(/^<@!?(\d+)>$/);
+	if (!matches) return;
+	const id = matches[1];
+	return oracle.users.cache.get(id);
+}
+
 module.exports = {
   name: 'message',
   once: false,
   execute(message, oracle){
+		if(message.author.bot) return;
+		index.currency.add(message.author.id, 1, 'ORB');
 
     if(!message.content.startsWith(PREFIX) || message.author.oracle) return;
     const args = message.content.slice(PREFIX.length).trim().split(/ +/);
@@ -18,7 +27,7 @@ module.exports = {
     if(!oracle.commands.has(commandName)) return;
 
   //if exists or has another name, create the command
-    const command = oracle.commands.get(commandName) || oracle.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+	const command = oracle.commands.get(commandName) || oracle.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
     if (!command) return;
 
   //execute commands only on server
