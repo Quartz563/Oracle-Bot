@@ -15,8 +15,8 @@
     "moderator":"786430010842939422",
     "administrator":"785130520308219964"
   },
-  "guild_ID": "784890785535492126",
-  "rules_channel_ID":"786308552272773131",
+  "guild_ID": "",
+  "rules_channel_ID":"",
   "reaction_ID":"843563339145805864",
-  "bot_logs_ID":"843544339959382016",
+  "bot_logs_ID":"",
 }
